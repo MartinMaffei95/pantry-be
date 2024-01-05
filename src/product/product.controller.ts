@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginationDto } from 'src/common/Dto/pagination.dto';
+import { SearchDto } from 'src/common/Dto/search.dto';
+import { ProductFiltersDto } from './dto/filters-dto';
 
 @Controller('product')
 export class ProductController {
@@ -13,8 +25,8 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(@Query() paginationDto: ProductFiltersDto) {
+    return this.productService.findAll(paginationDto);
   }
 
   @Get(':id')
