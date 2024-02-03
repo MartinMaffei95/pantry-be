@@ -39,6 +39,13 @@ export class ProductService {
       .find(productsQuery)
       .limit(limit)
       .skip((page - 1) * limit)
+      .populate([
+        { path: 'resultOf' },
+        {
+          path: 'resultOf',
+          populate: { path: 'ingredients', populate: { path: 'product' } },
+        },
+      ])
       .exec();
 
     let paginationInfo: PaginationInfo = {

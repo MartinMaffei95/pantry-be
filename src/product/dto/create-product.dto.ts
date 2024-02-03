@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import {
   IsDefined,
@@ -6,6 +7,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
+  IsOptional,
   IsPositive,
   IsString,
   MaxLength,
@@ -36,15 +38,20 @@ export class CreateProductDto {
   @IsIn(['BASIC', 'ELABORATED'])
   type: 'BASIC' | 'ELABORATED';
 
-//   @IsInt()
-//   @IsPositive()
-//   @Min(0.0001)
-//   price: number;
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(40)
+  resultOf?: string;
+  //   @IsInt()
+  //   @IsPositive()
+  //   @Min(0.0001)
+  //   price: number;
 
-//   @IsDefined()
-//   @IsNotEmptyObject()
-//   @IsObject()
-//   @ValidateNested()
-//   @Type(() => MeasurementDto)
-//   measurement: MeasurementDto;
+  //   @IsDefined()
+  //   @IsNotEmptyObject()
+  //   @IsObject()
+  //   @ValidateNested()
+  //   @Type(() => MeasurementDto)
+  //   measurement: MeasurementDto;
 }

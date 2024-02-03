@@ -12,13 +12,16 @@ import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { PaginationDto } from 'src/common/Dto/pagination.dto';
+import { Logger } from '@nestjs/common';
 
 @Controller('recipe')
 export class RecipeController {
+  private readonly logger = new Logger(RecipeController.name);
   constructor(private readonly recipeService: RecipeService) {}
 
   @Post()
   create(@Body() createRecipeDto: CreateRecipeDto) {
+    this.logger.log(createRecipeDto);
     return this.recipeService.create(createRecipeDto);
   }
 

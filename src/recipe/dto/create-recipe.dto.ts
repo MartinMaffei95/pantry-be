@@ -7,6 +7,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNotEmptyObject,
+  IsNumber,
   IsObject,
   IsOptional,
   IsPositive,
@@ -47,9 +48,9 @@ class MeasurementDto {
   @IsIn(measurements)
   meassurement: Measurements;
 
-  @IsInt()
+  @IsNumber()
   @IsPositive()
-  @Min(1)
+  @Min(0.1)
   quantity: number;
 }
 
@@ -83,9 +84,8 @@ class PortionsDto extends MeasurementDto {
 
 class RecipeResultDto {
   @IsNotEmpty()
-  @IsObjectId()
   @IsString()
-  product: string; // product id
+  product: string; // product  name. Use the name to create a new elaborated PRODCUT
 
   @IsDefined()
   @IsNotEmptyObject()
