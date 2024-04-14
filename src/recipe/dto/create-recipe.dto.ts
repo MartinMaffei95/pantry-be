@@ -81,7 +81,7 @@ class IngredientRecipeDtoExtended extends IngredientRecipeDto {
   @Type(() => IngredientRecipeDto)
   @IsOptional()
   replace_by: IngredientRecipeDto[];
-  ingredient: import("f:/WEBS/pantry/pantry-proyect/src/recipe/entities/ingredient.entity").Ingredient;
+ 
 }
 
 class PortionsDto extends MeasurementDto {
