@@ -27,12 +27,14 @@ export class RecipeController {
 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
+    this.logger.log("GET ALL");
+
     return this.recipeService.findAll(paginationDto);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.recipeService.findOne(id);
+    return this.recipeService.findOne(+id);
   }
 
   @Patch(':id')

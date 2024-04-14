@@ -11,8 +11,6 @@ import {
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PaginationDto } from 'src/common/Dto/pagination.dto';
-import { SearchDto } from 'src/common/Dto/search.dto';
 import { ProductFiltersDto } from './dto/filters-dto';
 
 @Controller('product')

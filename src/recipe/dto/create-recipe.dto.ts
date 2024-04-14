@@ -18,35 +18,44 @@ import {
 } from 'class-validator';
 import { measurements } from 'src/configs/Generic.config';
 import { Measurements } from 'src/interfaces';
-import { IsObjectId } from 'class-validator-mongo-object-id';
+import { BeforeInsert } from 'typeorm';
 
 class StepRecipeDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(40)
   title: string;
 
   @IsString()
   @MaxLength(150)
-  description: string;
+  text: string;
 
   @IsInt()
   @IsPositive()
   @IsNotEmpty()
   @Min(1)
-  step: number;
+  order: number;
 
   @IsInt()
   @IsPositive()
   @Min(1)
+  @IsOptional()
   duration?: string; //minutes
+
+  
+  @BeforeInsert()
+  adaptTitle(){
+      if(!this.title || this.title.length <=0){
+          this.title = `Paso ${this.order}`
+      }
+    }
 }
 
 class MeasurementDto {
   @IsString()
   @IsDefined()
   @IsIn(measurements)
-  meassurement: Measurements;
+  measurement: Measurements;
 
   @IsNumber()
   @IsPositive()
@@ -56,9 +65,8 @@ class MeasurementDto {
 
 class IngredientRecipeDto {
   @IsNotEmpty()
-  @IsObjectId()
-  @IsString()
-  product: string; // product id
+  @IsInt()
+  product: number; // product id
 
   @IsDefined()
   @IsNotEmptyObject()
@@ -73,6 +81,7 @@ class IngredientRecipeDtoExtended extends IngredientRecipeDto {
   @Type(() => IngredientRecipeDto)
   @IsOptional()
   replace_by: IngredientRecipeDto[];
+  ingredient: import("f:/WEBS/pantry/pantry-proyect/src/recipe/entities/ingredient.entity").Ingredient;
 }
 
 class PortionsDto extends MeasurementDto {
@@ -83,8 +92,8 @@ class PortionsDto extends MeasurementDto {
 }
 
 class RecipeResultDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   product: string; // product  name. Use the name to create a new elaborated PRODCUT
 
   @IsDefined()
@@ -118,6 +127,7 @@ export class CreateRecipeDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => StepRecipeDto)
+  @IsOptional()
   steps: StepRecipeDto[];
 
   @IsDefined()

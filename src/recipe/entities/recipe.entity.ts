@@ -1,71 +1,39 @@
-import { Product } from './../../product/entities/product.entity';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RecipeStep } from "./recipe-step.entity";
+import { RecipeResult } from "./recipe-result.entity";
+import { Ingredient } from "./ingredient.entity";
 
-@Schema({ _id: false })
-class StepRecipe {
-  @Prop()
-  title: string;
-  @Prop()
-  description: string;
-  @Prop()
-  step: number;
-  @Prop()
-  duration: number;
-}
+@Entity({name:"recipes"})
+export class Recipe{
+  @PrimaryGeneratedColumn("increment")
+  id:number
 
-@Schema({ _id: false })
-class Measurement {
-  @Prop()
-  meassurement: string;
-  @Prop()
-  quantity: number;
-}
-
-@Schema({ _id: false })
-class IngredientRecipe extends Document {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Product' })
-  product: Product; //objectId;
-  @Prop(Measurement)
-  measurement: Measurement;
-}
-
-@Schema({ _id: false })
-class IngredientRecipeExtended extends IngredientRecipe {
-  @Prop([IngredientRecipe])
-  replace_by: IngredientRecipe;
-}
-
-@Schema({ _id: false })
-class Portions extends Measurement {
-  @Prop()
-  wight: number;
-}
-
-@Schema({ _id: false })
-class RecipeResult extends Document {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Product' })
-  product: Product; //objectId
-
-  @Prop(Measurement)
-  yield: Measurement;
-  @Prop(Portions)
-  portion: Portions;
-}
-
-@Schema()
-export class Recipe extends Document {
-  @Prop()
+  @Column("text")
   name: string;
 
-  @Prop([IngredientRecipeExtended])
-  ingredients: IngredientRecipeExtended;
 
-  @Prop([StepRecipe])
-  steps: StepRecipe;
+  @OneToMany(
+      ()=>RecipeStep,
+      (step)=>step.recipe,
+      {cascade:true,eager:true}
+  )
+  steps?:RecipeStep[]
 
-  @Prop(RecipeResult)
-  result: RecipeResult;
+  @OneToOne(
+    ()=>RecipeResult,
+    (result)=>result.id,
+    {cascade:true,eager:true}
+  )
+  @JoinColumn({name:"recipe_result"})
+  result:RecipeResult
+
+  @OneToMany(
+    ()=>Ingredient,
+    (ingredient)=>ingredient.recipe,
+    {cascade:true,eager:true}
+  )
+  ingredients:Ingredient[]
+
+
+  
 }
-
-export const RecipeSchema = SchemaFactory.createForClass(Recipe);

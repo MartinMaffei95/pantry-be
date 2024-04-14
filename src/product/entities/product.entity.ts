@@ -1,19 +1,34 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Recipe } from 'src/recipe/entities/recipe.entity';
+import { Ingredient, RecipeResult } from 'src/recipe/entities';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Schema()
-export class Product extends Document {
-  @Prop({
-    index: true,
+@Entity({name:"products"})
+export class Product {
+
+  @PrimaryGeneratedColumn("increment")
+  id:number
+
+ 
+  @Column("text",{
+    unique:true
   })
   name: string;
 
-  @Prop()
+  @Column("text")
   type: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Recipe' })
-  resultOf?: Recipe;
+  @OneToMany(
+    ()=>Ingredient,
+    (ingredient)=>ingredient.product,
+    {cascade:true,eager:true}
+  )
+    product?:Ingredient
+
+    // @OneToOne(
+    //   ()=>RecipeResult,
+    //   (result)=>result.id,
+
+    // )
+    //  @JoinColumn()
+    //  resultOf?:RecipeResult
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
