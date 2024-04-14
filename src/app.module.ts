@@ -7,7 +7,9 @@ import { RecipeModule } from './recipe/recipe.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [ConfigModule.forRoot(),
+  imports: [ConfigModule.forRoot({
+    expandVariables: true,
+  }),
     TypeOrmModule.forRoot({
       type:"postgres",
       host:process.env.DB_HOST,
